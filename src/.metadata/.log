@@ -1,0 +1,19 @@
+!SESSION 2024-05-18 21:57:43.570 -----------------------------------------------
+eclipse.buildId=Version 1.12.1
+java.version=11.0.17
+java.vendor=Eclipse Adoptium
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=pl_PL
+Framework arguments:  C:\Users\Public\Documents\JR_PROJECT\sonar_01\src\.project
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 C:\Users\Public\Documents\JR_PROJECT\sonar_01\src\.project
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 4 4 2024-05-18 21:58:24.597
+!MESSAGE CubeMX plugin appears to be active, Log4j initialization might be too late.
+
+!ENTRY com.st.stm32cube.ide.mcu.informationcenter 1 1 2024-05-18 21:58:24.612
+!MESSAGE Log4j2 initialized with config file C:\Users\Public\Documents\JR_PROJECT\sonar_01\src\.metadata\.log4j2.xml
+
+!ENTRY com.st.stm32cube.ide.mcu.ide 1 1 2024-05-18 21:58:31.597
+!MESSAGE Started RMI Server, listening on port 41337
+
+!ENTRY org.eclipse.core.jobs 2 2 2024-05-18 22:00:33.122
+!MESSAGE Job found still running after platform shutdown.  Jobs should be canceled by the plugin that scheduled them during shutdown: org.eclipse.ecf.filetransfer.FileTransferJob
