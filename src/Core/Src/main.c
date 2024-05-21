@@ -22,6 +22,7 @@
 #include "usart.h"
 #include "gpio.h"
 #include "stepper.h"
+#include <stdbool.h>
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -101,11 +102,11 @@ int main(void)
   stepper_init(&stepper, &htim2, TIM_CHANNEL_3);
 
 //  int32_t speed_table[SET_TABLE_SIZE] = {30, 20, -20, 10, 50};
-  int32_t angle_table[SET_TABLE_SIZE] = {-20, -10, 0, 10, 20};
+  int32_t angle_table[SET_TABLE_SIZE] = {-10, -5, 0, 5, 10};
 
   int i = 0;
   uint32_t time_tick = HAL_GetTick();
-  uint32_t max_time = 2000;
+  uint32_t max_time = 200;
   uint32_t angle = 0; //speed = 0;
   direction dir = CW;
 
@@ -138,17 +139,15 @@ if((HAL_GetTick() - time_tick) > max_time)
 			  dir = CCW;
 		  }
 
-		  stepper_set_angle(&stepper, dir, 10, angle);
+		  stepper_set_angle(&stepper, dir, 20, angle);
 
 
 
 		  i++;
 
-		  if(i >= SET_TABLE_SIZE)
-		  {
-			  i = 0;
-		  }
-	  }
+
+	 }
+
     /* USER CODE END WHILE */
 
 
@@ -218,7 +217,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 }
 #elif STEPPER_ANGLE_MODE == STEPPER_ANGLE_MODE_MANUAL
 void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim)
-											 
+
 {
 	if(htim->Instance == stepper.timer.htim->Instance)
 	{
