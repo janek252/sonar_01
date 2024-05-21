@@ -86,6 +86,8 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  HAL_Init();
+  SystemClock_Config();
   MX_USART2_UART_Init();
   MX_TIM7_Init();
   MX_TIM1_Init();
@@ -99,7 +101,7 @@ int main(void)
   stepper_init(&stepper, &htim2, TIM_CHANNEL_3);
 
 //  int32_t speed_table[SET_TABLE_SIZE] = {30, 20, -20, 10, 50};
-  int32_t angle_table[SET_TABLE_SIZE] = {30, 90, 45, 15, -180};
+  int32_t angle_table[SET_TABLE_SIZE] = {-20, -10, 0, 10, 20};
 
   int i = 0;
   uint32_t time_tick = HAL_GetTick();
@@ -138,19 +140,7 @@ if((HAL_GetTick() - time_tick) > max_time)
 
 		  stepper_set_angle(&stepper, dir, 10, angle);
 
-                  //praca ciągła
-		  /*if(speed_table[i] >= 0)
-		  {
-			  speed = speed_table[i];
-			  dir = CW;
-		  }
-		  else
-		  {
-			  speed = -speed_table[i];
-			  dir = CCW;
-		  }
 
-		  stepper_set_continous(&stepper, dir, speed);*/
 
 		  i++;
 
@@ -161,7 +151,7 @@ if((HAL_GetTick() - time_tick) > max_time)
 	  }
     /* USER CODE END WHILE */
 
-    
+
 
   }
 #endif
