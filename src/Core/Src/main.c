@@ -21,7 +21,7 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-
+#include "stepper.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -33,7 +33,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define SET_TABLE_SIZE	5
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -44,7 +44,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+struct stepper_s stepper = {0};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -64,7 +64,6 @@ void SystemClock_Config(void);
   */
 int main(void)
 {
-
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -89,9 +88,25 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_TIM7_Init();
+  MX_TIM1_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start(&htim7);
+#if STEPPER_ANGLE_MODE == STEPPER_ANGLE_MODE_SLAVE_TIM
+  stepper_init(&stepper, &htim2, TIM_CHANNEL_3, &htim1);
+
+#elif STEPPER_ANGLE_MODE == STEPPER_ANGLE_MODE_MANUAL
+  stepper_init(&stepper, &htim2, TIM_CHANNEL_3);
+
+//  int32_t speed_table[SET_TABLE_SIZE] = {30, 20, -20, 10, 50};
+  int32_t angle_table[SET_TABLE_SIZE] = {30, 90, 45, 15, -180};
+
+  int i = 0;
+  uint32_t time_tick = HAL_GetTick();
+  uint32_t max_time = 2000;
+  uint32_t angle = 0; //speed = 0;
+  direction dir = CW;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -101,9 +116,55 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  Sensor_get_distance();
-	  HAL_Delay(300);
+	  // Sensor_get_distance();
+	  // HAL_Delay(300);
+
+
+if((HAL_GetTick() - time_tick) > max_time)
+	  {
+		  time_tick = HAL_GetTick();
+
+                  //obrót o zadany kąt
+		  if(angle_table[i] >= 0)
+		  {
+			  angle = angle_table[i];
+			  dir = CW;
+		  }
+		  else
+		  {
+			  angle = -angle_table[i];
+			  dir = CCW;
+		  }
+
+		  stepper_set_angle(&stepper, dir, 10, angle);
+
+                  //praca ciągła
+		  /*if(speed_table[i] >= 0)
+		  {
+			  speed = speed_table[i];
+			  dir = CW;
+		  }
+		  else
+		  {
+			  speed = -speed_table[i];
+			  dir = CCW;
+		  }
+
+		  stepper_set_continous(&stepper, dir, speed);*/
+
+		  i++;
+
+		  if(i >= SET_TABLE_SIZE)
+		  {
+			  i = 0;
+		  }
+	  }
+    /* USER CODE END WHILE */
+
+    
+
   }
+#endif
   /* USER CODE END 3 */
 }
 
@@ -157,6 +218,29 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+#if STEPPER_ANGLE_MODE == STEPPER_ANGLE_MODE_SLAVE_TIM
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+	if(htim->Instance == stepper.slave_timer.htim->Instance)
+	{
+		stepper_stop(&stepper);
+	}
+}
+#elif STEPPER_ANGLE_MODE == STEPPER_ANGLE_MODE_MANUAL
+void HAL_TIM_PWM_PulseFinishedCallback(TIM_HandleTypeDef *htim)
+											 
+{
+	if(htim->Instance == stepper.timer.htim->Instance)
+	{
+		stepper.step_counter++;
+
+		if(stepper.step_counter >= stepper.steps_to_count)
+		{
+			stepper_stop(&stepper);
+		}
+	}
+}
+#endif
 
 /* USER CODE END 4 */
 
