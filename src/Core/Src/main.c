@@ -34,7 +34,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define SET_TABLE_SIZE	5
+#define SET_TABLE_SIZE	11
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -103,11 +103,11 @@ int main(void)
 
 //  int32_t speed_table[SET_TABLE_SIZE] = {30, 20, -20, 10, 50};
   // int32_t angle_table[SET_TABLE_SIZE] = {-10, -5, 0, 5, 10};
-int32_t angle_table[SET_TABLE_SIZE] = {-10, -5, 0, 5, 10}; // Zakres 180 stopni
+int32_t angle_table[SET_TABLE_SIZE] = {-25 ,-20, -15 , -10, -5, 0, 5, 10, 15, 20, 25}; // Zakres 180 stopni
   int i = 0;
   uint32_t time_tick = HAL_GetTick();
   uint32_t max_time = 2000;
-  uint32_t angle = 40; //speed = 0;
+  uint32_t angle = 0; //speed = 0;
   direction dir = CW;
 
   /* USER CODE END 2 */
@@ -127,10 +127,10 @@ int32_t angle_table[SET_TABLE_SIZE] = {-10, -5, 0, 5, 10}; // Zakres 180 stopni
         int32_t angle = angle_table[i];
         dir = (angle >= 0) ? CW : CCW;
 
-        stepper_set_angle(&stepper, dir, 2, abs(angle)); // Ustawienie kąta bezwzględnego
+        stepper_set_angle(&stepper, dir, 1 , abs(angle)); // Ustawienie kąta bezwzględnego
 
         Sensor_get_distance();
-        HAL_Delay(300); // Poczekaj przed wykonaniem następnego kroku
+        HAL_Delay(100);// Poczekaj przed wykonaniem następnego kroku
         i = (i + 1) % SET_TABLE_SIZE; // Zapętlenie indeksu w tabeli kątów
 
 
