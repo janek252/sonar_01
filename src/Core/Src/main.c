@@ -102,12 +102,12 @@ int main(void)
   stepper_init(&stepper, &htim2, TIM_CHANNEL_3);
 
 //  int32_t speed_table[SET_TABLE_SIZE] = {30, 20, -20, 10, 50};
-  int32_t angle_table[SET_TABLE_SIZE] = {-10, -5, 0, 5, 10};
-
+  // int32_t angle_table[SET_TABLE_SIZE] = {-10, -5, 0, 5, 10};
+int32_t angle_table[SET_TABLE_SIZE] = {-10, -5, 0, 5, 10}; // Zakres 180 stopni
   int i = 0;
   uint32_t time_tick = HAL_GetTick();
-  uint32_t max_time = 200;
-  uint32_t angle = 0; //speed = 0;
+  uint32_t max_time = 2000;
+  uint32_t angle = 40; //speed = 0;
   direction dir = CW;
 
   /* USER CODE END 2 */
@@ -119,31 +119,21 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  // Sensor_get_distance();
-	  // HAL_Delay(300);
+
+    if ((HAL_GetTick() - time_tick) > max_time)
+    {
+        time_tick = HAL_GetTick();
+
+        int32_t angle = angle_table[i];
+        dir = (angle >= 0) ? CW : CCW;
+
+        stepper_set_angle(&stepper, dir, 2, abs(angle)); // Ustawienie kąta bezwzględnego
+
+        Sensor_get_distance();
+        HAL_Delay(300); // Poczekaj przed wykonaniem następnego kroku
+        i = (i + 1) % SET_TABLE_SIZE; // Zapętlenie indeksu w tabeli kątów
 
 
-if((HAL_GetTick() - time_tick) > max_time)
-	  {
-		  time_tick = HAL_GetTick();
-
-                  //obrót o zadany kąt
-		  if(angle_table[i] >= 0)
-		  {
-			  angle = angle_table[i];
-			  dir = CW;
-		  }
-		  else
-		  {
-			  angle = -angle_table[i];
-			  dir = CCW;
-		  }
-
-		  stepper_set_angle(&stepper, dir, 20, angle);
-
-
-
-		  i++;
 
 
 	 }
