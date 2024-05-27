@@ -31,7 +31,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "stepper.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -65,6 +65,8 @@ void Error_Handler(void);
 #define USART_RX_GPIO_Port GPIOA
 #define LD2_Pin GPIO_PIN_5
 #define LD2_GPIO_Port GPIOA
+#define STEP_Pin GPIO_PIN_10
+#define STEP_GPIO_Port GPIOB
 #define Echo_Pin GPIO_PIN_8
 #define Echo_GPIO_Port GPIOA
 #define Trigger_Pin GPIO_PIN_9
@@ -75,6 +77,8 @@ void Error_Handler(void);
 #define TCK_GPIO_Port GPIOA
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
+#define DIR_Pin GPIO_PIN_5
+#define DIR_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
