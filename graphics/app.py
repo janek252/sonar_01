@@ -13,6 +13,7 @@ def connect(): #funkcja laczaca sie z mikrokontrolerem poprzez serial
 
 def disconnect(ser): #funkcja rozlaczajaca port serial
     ser.close()
+    plt.close()
     return
 
 def read_data():
@@ -49,4 +50,4 @@ if __name__ == "__main__":
     line, = ax.plot([], [], 'ro')
     frame = read_data
     line_tmp = update(frame)
-    disconnect(ser)
+    fig.canvas.mpl_connect('disconnect', disconnect)
