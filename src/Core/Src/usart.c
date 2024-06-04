@@ -127,6 +127,7 @@ void send_data(uint32_t distance, uint32_t angle){
 	uint8_t distance8t = (uint8_t)distance;
 	HAL_UART_Transmit(&huart2,&distance8t,sizeof(distance8t),40);
 	HAL_Delay(10);
+  angle += (uint32_t)25;
 	uint8_t angle8t = (uint8_t)angle;
 	HAL_UART_Transmit(&huart2,&angle8t,sizeof(angle8t),40);
 	return;

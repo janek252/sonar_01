@@ -7,7 +7,7 @@ def connect(): #funkcja laczaca sie z mikrokontrolerem poprzez serial
     ser = serial.Serial()
     ser.baudrate = 115200
     ser.port = 'COM4'
-    ser.timeout = 0.045
+    ser.timeout = 0.04
     ser.open()
     return ser
 
