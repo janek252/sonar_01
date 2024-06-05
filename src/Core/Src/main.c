@@ -23,6 +23,7 @@
 #include "gpio.h"
 #include "stepper.h"
 #include <stdbool.h>
+#include <stdlib.h>
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -129,9 +130,9 @@ int main(void)
 
         stepper_set_angle(&stepper, dir, 1 , abs(angle)); // Ustawienie kąta bezwzględnego
 
-        auto distance = Sensor_get_distance();
+        uint32_t distance = Sensor_get_distance();
 
-        send_data(distance, angle);
+        Send_data(distance, angle);
 
         HAL_Delay(100);// Poczekaj przed wykonaniem następnego kroku
         i = (i + 1) % SET_TABLE_SIZE; // Zapętlenie indeksu w tabeli kątów

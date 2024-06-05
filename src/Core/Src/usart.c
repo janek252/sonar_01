@@ -123,7 +123,7 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
-void send_data(uint32_t distance, uint32_t angle){
+void Send_data(uint32_t distance, uint32_t angle){
 	uint8_t distance8t = (uint8_t)distance;
 	HAL_UART_Transmit(&huart2,&distance8t,sizeof(distance8t),40);
 	HAL_Delay(10);
