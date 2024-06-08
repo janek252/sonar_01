@@ -108,6 +108,7 @@ int main(void)
   int i = 0;
   uint32_t time_tick = HAL_GetTick();
   uint32_t max_time = 2000;
+  uint32_t distance;
   //uint32_t angle = 0; //speed = 0;
   direction dir = CW;
 
@@ -130,14 +131,12 @@ int main(void)
 
         stepper_set_angle(&stepper, dir, 1 , abs(angle)); // Ustawienie kąta bezwzględnego
 
-        uint32_t distance = Sensor_get_distance();
+        distance = Sensor_get_distance();
 
         Send_data(distance, angle);
 
         HAL_Delay(100);// Poczekaj przed wykonaniem następnego kroku
         i = (i + 1) % SET_TABLE_SIZE; // Zapętlenie indeksu w tabeli kątów
-
-
 	 }
 
     /* USER CODE END WHILE */
