@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
+#include <stdio.h>
 
 /* USER CODE BEGIN 0 */
 
@@ -123,20 +124,12 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
-void Send_data(uint32_t distance, uint32_t angle){
-	uint8_t distance_data [4];
-	distance_data[0] = (distance >> 24) & 0xFF;
-	distance_data[1] = (distance >> 16) & 0xFF;
-	distance_data[2] = (distance >> 8) & 0xFF;
-	distance_data[3] = distance & 0xFF;
-	HAL_UART_Transmit(&huart2,distance_data,sizeof(distance_data),40);
-	angle += (uint32_t)25;
-	uint8_t angle_data [4];
-	angle_data[0] = (distance >> 24) & 0xFF;
-	angle_data[1] = (distance >> 16) & 0xFF;
-	angle_data[2] = (distance >> 8) & 0xFF;
-	angle_data[3] = distance & 0xFF;
-	HAL_UART_Transmit(&huart2,angle_data,sizeof(angle_data),40);
+char buffer[8] = {0};
+int32_t new_angle;
+void Send_data(uint32_t distance, int32_t angle){
+	HAL_UART_Transmit(&huart2,(uint8_t*)buffer,sprintf(buffer,"%ld",distance),40);
+	new_angle = angle + 25;
+	HAL_UART_Transmit(&huart2,(uint8_t*)buffer,sprintf(buffer,"%ld",new_angle),40);
 	return;
 }
 /* USER CODE END 1 */

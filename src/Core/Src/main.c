@@ -21,9 +21,11 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-#include "stepper.h"
-#include <stdbool.h>
 #include <stdlib.h>
+#include "stepper.h"
+#include "HCSR04.h"
+
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -66,6 +68,7 @@ void SystemClock_Config(void);
   */
 int main(void)
 {
+
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -88,12 +91,10 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  HAL_Init();
-  SystemClock_Config();
   MX_USART2_UART_Init();
   MX_TIM7_Init();
-  MX_TIM1_Init();
   MX_TIM2_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start(&htim7);
 #if STEPPER_ANGLE_MODE == STEPPER_ANGLE_MODE_SLAVE_TIM
