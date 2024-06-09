@@ -31,13 +31,15 @@ def read_data(ser):
 
 
 def update(frame):
-    global distance, angle
+    global data
     new_distance, new_angle = read_data(ser)
     if new_distance is not None and new_angle is not None:
-        distance = new_distance
-        angle = np.deg2rad(new_angle)  # Konwersja kąta na radiany
-    line.set_data([angle], [distance])
-    ax.set_ylim(0, max(distance + 10, 100))  # Ustaw zakres dla odległości, aby nie był statyczny
+        data[new_angle] = new_distance  # Nadpisz starą wartość dla tego samego kąta
+    if data:
+        angles = np.deg2rad(list(data.keys()))  # Konwersja kątów na radiany
+        distances = list(data.values())
+        line.set_data(angles, distances)
+        ax.set_ylim(0, max(max(distances) + 10, 150))  # Ustaw zakres dla odległości, aby nie był statyczny
     return line,
 
 if __name__ == "__main__":
@@ -45,8 +47,7 @@ if __name__ == "__main__":
     print(ser)
 
     fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
-    distance = 0
-    angle = 0
+    data = {} # Słownik do przechowywania danych (angle: distance)
     line, = ax.plot([], [], 'ro')
     
     ani = animation.FuncAnimation(fig, update, blit=True, interval=100)  # Tworzenie animacji
