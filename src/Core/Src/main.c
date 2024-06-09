@@ -37,7 +37,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define SET_TABLE_SIZE	11
+#define SET_TABLE_SIZE	73
+#define ANGLE_STEP 5
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -103,16 +104,25 @@ int main(void)
 #elif STEPPER_ANGLE_MODE == STEPPER_ANGLE_MODE_MANUAL
   stepper_init(&stepper, &htim2, TIM_CHANNEL_3);
 
-//  int32_t speed_table[SET_TABLE_SIZE] = {30, 20, -20, 10, 50};
-  // int32_t angle_table[SET_TABLE_SIZE] = {-10, -5, 0, 5, 10};
-  int32_t angle_table[SET_TABLE_SIZE] = {-25 ,-20, -15 , -10, -5, 0, 5, 10, 15, 20, 25}; // Zakres 50 stopni
+  int32_t angle_table[SET_TABLE_SIZE] = {0};
+  int32_t angle;
   int i = 0;
-  uint32_t time_tick = HAL_GetTick();
-  uint32_t max_time = 2000;
+
+  {
+		int max_angle = -((SET_TABLE_SIZE - 1) / 2 * ANGLE_STEP);
+		for (;i<SET_TABLE_SIZE;i++){
+		  angle_table[i] = max_angle + i * ANGLE_STEP;
+		}
+  }
+
+  i = (SET_TABLE_SIZE - 1) / 2;
   uint32_t distance;
   //uint32_t angle = 0; //speed = 0;
-  direction dir = CW;
+  direction dir = CCW;
 
+
+  uint32_t time_tick = HAL_GetTick();
+  uint32_t max_time = 2000;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -122,23 +132,20 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	if ((HAL_GetTick() - time_tick) > max_time)
+	  {
+		angle = abs(angle_table[i]);
+		dir = (i >= (SET_TABLE_SIZE/2 + 1)) ? CCW : CW;
 
-    if ((HAL_GetTick() - time_tick) > max_time)
-    {
-        time_tick = HAL_GetTick();
+		stepper_set_angle(&stepper, dir, 1 , angle); // Ustawienie kąta bezwzględnego
 
-        int32_t angle = angle_table[i];
-        dir = (angle >= 0) ? CW : CCW;
+		distance = Sensor_get_distance();
 
-        stepper_set_angle(&stepper, dir, 1 , abs(angle)); // Ustawienie kąta bezwzględnego
+		Send_data(distance, angle);
 
-        distance = Sensor_get_distance();
-
-        Send_data(distance, angle);
-
-        HAL_Delay(100);// Poczekaj przed wykonaniem następnego kroku
-        i = (i + 1) % SET_TABLE_SIZE; // Zapętlenie indeksu w tabeli kątów
-	 }
+		HAL_Delay(500);// Poczekaj przed wykonaniem następnego kroku
+		i = (i + 1) % SET_TABLE_SIZE; // Zapętlenie indeksu w tabeli kątów
+	  }
 
     /* USER CODE END WHILE */
 
