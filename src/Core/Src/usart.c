@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
+#include <stdio.h>
 
 /* USER CODE BEGIN 0 */
 
@@ -123,5 +124,9 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
-
+char buffer[20] = {0};
+void Send_data(uint32_t distance, int32_t angle){
+	HAL_UART_Transmit(&huart2,(uint8_t*)buffer,sprintf(buffer,"%ld %ld\n",distance, angle),40);
+	return;
+}
 /* USER CODE END 1 */

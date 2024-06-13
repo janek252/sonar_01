@@ -1,5 +1,5 @@
-Core/Src/HC-SR04.o: ../Core/Src/HC-SR04.c ../Core/Inc/main.h \
- ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h \
+Core/Src/HC-SR04.o: ../Core/Src/HC-SR04.c ../Core/Inc/HCSR04.h \
+ ../Core/Inc/main.h ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h \
  ../Core/Inc/stm32l4xx_hal_conf.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h \
@@ -27,8 +27,9 @@ Core/Src/HC-SR04.o: ../Core/Src/HC-SR04.c ../Core/Inc/main.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim_ex.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h \
  ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h \
- ../Core/Inc/stepper.h ../Core/Inc/tim.h ../Core/Inc/main.h \
+ ../Core/Inc/stepper.h ../Core/Inc/main.h ../Core/Inc/tim.h \
  ../Core/Inc/gpio.h
+../Core/Inc/HCSR04.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h:
 ../Core/Inc/stm32l4xx_hal_conf.h:
@@ -59,6 +60,6 @@ Core/Src/HC-SR04.o: ../Core/Src/HC-SR04.c ../Core/Inc/main.h \
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h:
 ../Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart_ex.h:
 ../Core/Inc/stepper.h:
-../Core/Inc/tim.h:
 ../Core/Inc/main.h:
+../Core/Inc/tim.h:
 ../Core/Inc/gpio.h:
